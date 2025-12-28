@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Financial Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- مهم جدًا للموبايل -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -27,54 +29,59 @@
 body{
     background:var(--bg);
     margin:0;
-    padding:30px;
+    padding:16px;
 }
 
+/* container */
 .container{
     max-width:900px;
     margin:auto;
 }
 
+/* header */
 .header{
     background:linear-gradient(135deg,#4f46e5,#4338ca);
     color:#fff;
-    padding:25px;
+    padding:20px;
     border-radius:16px;
-    margin-bottom:25px;
+    margin-bottom:20px;
+    text-align:center;
 }
 
 .header h1{
     margin:0;
-    font-size:26px;
-    font-weight:700;
+    font-size:22px;
 }
 
+/* cards */
 .card{
     background:var(--card);
     border-radius:14px;
-    padding:20px;
-    margin-bottom:20px;
+    padding:16px;
+    margin-bottom:16px;
     box-shadow:0 10px 25px rgba(0,0,0,.05);
 }
 
 .card h2{
-    margin:0 0 15px;
-    font-size:18px;
+    margin:0 0 12px;
+    font-size:16px;
     color:var(--primary);
 }
 
+/* grid inputs */
 .grid{
     display:grid;
     grid-template-columns:2fr 1fr;
     gap:10px;
 }
 
+/* inputs */
 input{
     width:100%;
-    padding:12px;
+    padding:14px;
     border-radius:10px;
     border:1px solid var(--border);
-    font-size:15px;
+    font-size:16px;
 }
 
 input:focus{
@@ -82,30 +89,34 @@ input:focus{
     border-color:var(--accent);
 }
 
+/* buttons */
 button{
-    padding:12px;
+    width:100%;
+    padding:14px;
+    margin-top:10px;
     border:none;
     border-radius:10px;
     background:var(--accent);
     color:#fff;
-    font-size:15px;
+    font-size:16px;
     cursor:pointer;
 }
 
-button:hover{
-    opacity:.9;
+button:active{
+    transform:scale(.98);
 }
 
+/* list */
 .list{
     margin-top:10px;
 }
 
 .item{
     display:grid;
-    grid-template-columns:1fr auto auto;
-    gap:10px;
+    grid-template-columns:1fr auto;
+    gap:8px;
     align-items:center;
-    padding:10px;
+    padding:10px 0;
     border-bottom:1px solid var(--border);
 }
 
@@ -115,51 +126,63 @@ button:hover{
 
 .amount{
     font-weight:600;
+    margin-inline:8px;
 }
 
+/* delete button */
 .delete-btn{
     background:var(--danger);
-    padding:6px 10px;
-    font-size:13px;
+    padding:6px 12px;
+    font-size:14px;
     border-radius:8px;
 }
 
+/* result */
 .result{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:15px;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
 }
 
 .stat{
     background:#f9fafb;
-    padding:15px;
+    padding:14px;
     border-radius:12px;
     text-align:center;
 }
 
 .stat h3{
     margin:0;
-    font-size:14px;
+    font-size:13px;
     color:#6b7280;
 }
 
 .stat p{
-    margin:8px 0 0;
-    font-size:20px;
+    margin:6px 0 0;
+    font-size:18px;
     font-weight:700;
 }
 
-.positive{
-    color:var(--success);
-}
+.positive{ color:var(--success); }
+.negative{ color:var(--danger); }
 
-.negative{
-    color:var(--danger);
-}
-
-@media(max-width:768px){
-    .grid,.result{
+/* 📱 موبايل */
+@media (max-width:600px){
+    .grid{
         grid-template-columns:1fr;
+    }
+
+    .result{
+        grid-template-columns:1fr;
+    }
+
+    .item{
+        grid-template-columns:1fr;
+        gap:4px;
+    }
+
+    .delete-btn{
+        width:100%;
     }
 }
 </style>
@@ -217,6 +240,17 @@ button:hover{
 </div>
 
 <script>
+const salaryInput = document.getElementById("salary");
+const fixedName = document.getElementById("fixedName");
+const fixedAmount = document.getElementById("fixedAmount");
+const varName = document.getElementById("varName");
+const varAmount = document.getElementById("varAmount");
+const fixedList = document.getElementById("fixedList");
+const varList = document.getElementById("varList");
+const fixedTotal = document.getElementById("fixedTotal");
+const varTotal = document.getElementById("varTotal");
+const remaining = document.getElementById("remaining");
+
 let salary = Number(localStorage.getItem("salary")) || 0;
 let fixedExpenses = JSON.parse(localStorage.getItem("fixed")) || [];
 let variableExpenses = JSON.parse(localStorage.getItem("variable")) || [];
@@ -270,8 +304,7 @@ function render(){
     fixedExpenses.forEach((e,i)=>{
         fixedList.innerHTML+=`
         <div class="item">
-            <div>${e.name}</div>
-            <div class="amount">${e.amount}</div>
+            <div>${e.name} - <span class="amount">${e.amount}</span></div>
             <button class="delete-btn" onclick="deleteFixed(${i})">حذف</button>
         </div>`;
     });
@@ -279,8 +312,7 @@ function render(){
     variableExpenses.forEach((e,i)=>{
         varList.innerHTML+=`
         <div class="item">
-            <div>${e.name}</div>
-            <div class="amount">${e.amount}</div>
+            <div>${e.name} - <span class="amount">${e.amount}</span></div>
             <button class="delete-btn" onclick="deleteVariable(${i})">حذف</button>
         </div>`;
     });
